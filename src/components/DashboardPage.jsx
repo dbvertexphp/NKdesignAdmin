@@ -2,14 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "./Sidebar";
 import Logout from "./Logout";
-import ChangePasswordModal from "./ChangePasswordModal";
 
 const DashboardPage = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [userCount, setUserCount] = useState(null); // State for user count from API
   const [loading, setLoading] = useState(true); // State to track if data is being loaded
   const [error, setError] = useState(null); // State to hold errors
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const BASE_URL = `${import.meta.env.VITE_BASE_URL}/api/inquiry/count`; // API URL for count
 
@@ -89,20 +87,6 @@ const DashboardPage = () => {
             <h3>Total Inquiries :- {userCount}</h3>
           </div>
         )}
-        <div style={{ textAlign: "center" }}>
-          <Logout /> {/* Button to Open Modal */}
-          <button
-            className="btn btn-primary"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Change Password
-          </button>
-          {/* Change Password Modal */}
-          <ChangePasswordModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-          />
-        </div>
       </div>
     </div>
   );

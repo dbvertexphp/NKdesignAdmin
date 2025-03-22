@@ -48,54 +48,111 @@ const BackgroundImage = () => {
   };
 
   const showAlert = (title, text, icon) => {
-    Swal.fire({ title, text, icon, confirmButtonColor: "#3085d6", confirmButtonText: "OK" });
+    Swal.fire({
+      title,
+      text,
+      icon,
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "OK",
+    });
   };
 
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      showAlert("No File Selected", "Please select an image to upload.", "warning");
-      return;
-    }
+  // const handleUpload = async () => {
+  //   if (!selectedFile) {
+  //     showAlert("No File Selected", "Please select an image to upload.", "warning");
+  //     return;
+  //   }
 
-    const formData = new FormData();
-    formData.append("image", selectedFile);
+  //   const formData = new FormData();
+  //   formData.append("image", selectedFile);
 
-    try {
-      setUploading(true);
-      const url = `${BASE_URL}/api/update/background/${imageId}`;
-      const response = await fetch(url, {
-        method: "PUT",
-        body: formData,
-      });
+  //   try {
+  //     setUploading(true);
+  //     const url = `${BASE_URL}/api/update/background/${imageId}`;
+  //     const response = await fetch(url, {
+  //       method: "PUT",
+  //       body: formData,
+  //     });
 
-      const data = await response.json();
-      setUploading(false);
+  //     const data = await response.json();
+  //     setUploading(false);
 
-      if (response.ok) {
-        setImageURL(`${BASE_URL}/uploads/backgroundimage/${data.image.filename}?t=${Date.now()}`);
-        setImageId(data.image._id);
-        setSelectedFile(null);
+  //     if (response.ok) {
+  //       setImageURL(`${BASE_URL}/uploads/backgroundimage/${data.image.filename}?t=${Date.now()}`);
+  //       setImageId(data.image._id);
+  //       setSelectedFile(null);
 
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ""; // Reset file input field
-        }
+  //       if (fileInputRef.current) {
+  //         fileInputRef.current.value = ""; // Reset file input field
+  //       }
 
-        showAlert("Success", "Background image updated successfully!", "success");
-      } else {
-        showAlert("Error", data.message || "Failed to upload/update image.", "error");
-      }
-    } catch (error) {
-      setUploading(false);
-      console.error("Upload Error:", error);
-      showAlert("Error", "An error occurred while uploading.", "error");
-    }
-  };
+  //       showAlert("Success", "Background image updated successfully!", "success");
+  //     } else {
+  //       showAlert("Error", data.message || "Failed to upload/update image.", "error");
+  //     }
+  //   } catch (error) {
+  //     setUploading(false);
+  //     console.error("Upload Error:", error);
+  //     showAlert("Error", "An error occurred while uploading.", "error");
+  //   }
+  // };
+	
+	const handleUpload = async () => {
+		if (!selectedFile) {
+			showAlert("No File Selected", "Please select an image to upload.", "warning");
+			return;
+		}
+	
+		const formData = new FormData();
+		formData.append("image", selectedFile);
+	
+		try {
+			setUploading(true);
+			const url = `${BASE_URL}/api/update/background/${imageId}`;
+			const response = await fetch(url, {
+				method: "PUT",
+				body: formData,
+			});
+	
+			const data = await response.json(); // Try parsing the response as JSON
+	
+			setUploading(false);
+	
+			if (response.ok) {
+				setImageURL(`${BASE_URL}/uploads/backgroundimage/${data.image.filename}?t=${Date.now()}`);
+				setImageId(data.image._id);
+				setSelectedFile(null);
+	
+				if (fileInputRef.current) {
+					fileInputRef.current.value = ""; // Reset file input field
+				}
+	
+				showAlert("Success", "Background image updated successfully!", "success");
+			} else {
+				// Handle API errors correctly
+				showAlert("Error", data.message || "Failed to upload/update image.", "error");
+			}
+		} catch (error) {
+			setUploading(false);
+			console.error("Upload Error:", error);
+	
+			// Display the correct error message
+			showAlert("Error", "Invalid file type only [jpeg, jpg, png] Or file is too large try less than 10MB", "error");
+		}
+	};
+	
 
   return (
     <div className="d-flex" style={{ minHeight: "100vh" }}>
       <Sidebar />
 
-      <div className="container mt-5" style={{ marginLeft: isSidebarOpen ? "250px" : "0", transition: "margin-left 0.3s ease" }}>
+      <div
+        className="container mt-5"
+        style={{
+          marginLeft: isSidebarOpen ? "250px" : "0",
+          transition: "margin-left 0.3s ease",
+        }}
+      >
         <div className="row justify-content-center">
           <div className="col-md-8">
             <div
@@ -112,11 +169,15 @@ const BackgroundImage = () => {
                 fontWeight: "bold",
               }}
             >
-              {!imageURL && <p className="text-dark">No background image uploaded</p>}
+              {!imageURL && (
+                <p className="text-dark">No background image uploaded</p>
+              )}
             </div>
 
             <div className="card-body text-center mt-3">
-              <h3 className="card-title text-primary">Update Background Image</h3>
+              <h3 className="card-title text-primary">
+                Update Background Image
+              </h3>
 
               <div className="mb-3">
                 <input
@@ -128,18 +189,28 @@ const BackgroundImage = () => {
                 />
               </div>
 
-              <button className="btn btn-success w-100" onClick={handleUpload} disabled={uploading}>
+              <button
+                className="btn btn-success w-100"
+                onClick={handleUpload}
+                disabled={uploading}
+              >
                 {uploading ? (
                   <span>
                     <span className="spinner-border spinner-border-sm me-2"></span>
                     Uploading...
                   </span>
+                ) : imageId ? (
+                  "Update Image"
                 ) : (
-                  imageId ? "Update Image" : "Upload Image"
+                  "Upload Image"
                 )}
               </button>
 
-              {imageId && <p className="mt-2 text-secondary">Image ID: <strong>{imageId}</strong></p>}
+              {imageId && (
+                <p className="mt-2 text-secondary">
+                  Image ID: <strong>{imageId}</strong>
+                </p>
+              )}
             </div>
           </div>
         </div>

@@ -53,7 +53,7 @@ const ProjectImage = () => {
       fetchProjectImages();
     } catch (error) {
       console.error("Upload error:", error);
-      Swal.fire("Failed to upload image!", "", "error");
+      Swal.fire("Invalid file type only [jpeg, jpg, png] Or file is too large try less than 10MB", "", "error");
     }
   };
 
@@ -75,7 +75,7 @@ const ProjectImage = () => {
       fetchProjectImages();
     } catch (error) {
       console.error("Update error:", error);
-      Swal.fire("Failed to update image!", "", "error");
+      Swal.fire("Invalid file type only [jpeg, jpg, png] Or file is too large try less than 10MB", "", "error");
     }
   };
 
@@ -118,6 +118,7 @@ const ProjectImage = () => {
 
         {/* Upload New Image */}
         <div className="mb-4">
+				<p style={{fontWeight: "500"}}>Upload New Project Images</p>
           <input type="file" className="form-control" onChange={handleFileChange} />
           <button className="btn btn-primary mt-2 w-100 w-md-auto" onClick={uploadImage}>
             Upload Image
@@ -127,6 +128,7 @@ const ProjectImage = () => {
         {/* Update Image Form */}
         {updatingImageId && (
           <div className="mb-4">
+					<p style={{fontWeight: "500"}}>Update Project Images</p>
             <input type="file" className="form-control" onChange={handleFileChange} />
             <button className="btn btn-success mt-2 w-100 w-md-auto" onClick={updateImage}>
               Update Image

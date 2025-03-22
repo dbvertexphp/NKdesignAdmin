@@ -88,7 +88,7 @@ const HeroImage = () => {
     } catch (error) {
       setUploading(false);
       console.error("Upload Error:", error);
-      showAlert("Error", "An error occurred while uploading.", "error");
+      showAlert("Error", "Invalid file type only [jpeg, jpg, png] Or file is too large try less than 10MB", "error");
     }
   };
 

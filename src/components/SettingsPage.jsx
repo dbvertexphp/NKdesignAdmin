@@ -1,15 +1,16 @@
-
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
+import Logout from "./Logout";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 const SettingsPage = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-
+	const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     // Update the sidebar state based on the window width
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        setSidebarOpen(true);  // Open sidebar by default on large screens
+        setSidebarOpen(true); // Open sidebar by default on large screens
       } else {
         setSidebarOpen(false); // Close sidebar by default on small screens
       }
@@ -17,7 +18,7 @@ const SettingsPage = () => {
 
     // Add event listener for window resizing
     window.addEventListener("resize", handleResize);
-    handleResize();  // Call it initially
+    handleResize(); // Call it initially
 
     // Cleanup the event listener
     return () => {
@@ -39,8 +40,20 @@ const SettingsPage = () => {
           transition: "margin-left 0.3s ease",
         }}
       >
-        <h1>Welcome to the SettingsPage</h1>
-        <p>SettingsPage</p>
+        <div style={{ textAlign: "center" }}>
+          <Logout /> {/* Button to Open Modal */}
+          <button
+            className="btn btn-primary"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Change Password
+          </button>
+          {/* Change Password Modal */}
+          <ChangePasswordModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
+        </div>
       </div>
     </div>
   );
